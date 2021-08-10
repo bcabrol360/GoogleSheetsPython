@@ -1,0 +1,8 @@
+Before coding I had to make a new document in google sheets and a new project in the google cloud platform.
+After creating the new project in the cloud platform, I enabled the Google Sheets API to have control over the appearance and data in the spreadsheet.
+I also enabled the Google Drive API to access files from Google drive. I then went into credentials and created a service account and gave the python program the permission of editor.
+After, I shared the google sheets document link with the email generated from the service account, I created a key to login with the service account email address.
+I was presented the option to create a new key or use an old key but I chose to generate a new one in JSON( can choose JSON or P12 formatting).
+It then generated a key for my project in JSON formatting(not attached) and downloaded it to my computer. I then renamed it and moved it into the directory of my project folder.
+After completing all of these steps I then moved on to coding in Python.
+
