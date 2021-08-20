@@ -7,8 +7,10 @@ from oauth2client.service_account import ServiceAccountCredentials  # oauth2clie
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt     #allows us to create charts
+import matplotlib.dates as mdates
 import scipy
-
+import datetime as dt
+import numpy as np
 #Used to gain access to the APIS Used in this project
 scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.file',
          'https://www.googleapis.com/auth/drive']
@@ -21,12 +23,12 @@ data = sheet.get_all_records()  #access all data in sheets
 
 #Get input for start date then update the cell
 #start_date = input("Enter the start date: ")
-start_date= '1/1/2020'
+start_date= '6/19/2021'
 sheet.update_cell(3,3 , value=start_date)
 
 #Get input for end date then update the cell
 #end_date = input("Enter the end date: ")
-end_date = '3/1/2020'
+end_date = '8/1/2021'
 sheet.update_cell(4,3 , value=end_date)
 
 #Get the ticker symbol and update the cell
@@ -55,27 +57,46 @@ values = sheet.get_all_values()                             #Get all values in c
 #puts all values received previously, in a pandas dataframe
 data = pd.DataFrame(values)
 
-#Create a for loop to iterate over sheet values
 
-#testy = close prices on chart
-testy = []
-#testx = date on chart
-testx = []
-#offset is used to get the for loop to see the column I want it to start at as the starting point for looping
-#I need it to start at column 6 so 6-6 will make it the starting point
-offset = 6
+#Calculate difference between 2 dates
+date_difference = '=NETWORKDAYS(C3,C4)'                     # =NETWORKDAYS() is a built in formula in google sheets to get
+                                                            # the # of business days between 2 dates(exclude the weekend and holidays)
+sheet.update_cell(3,4, value=date_difference)               #updates cell with value
+data_range = data.values[2,3]
+day_range = int(data_range)                                 #convert the days into an int
+print(data_range)
 
-#My next plan of action is to figure out how to adjust the range and change interval of dates on the graph according to the
-#users range of information
 
-#in the position of 40 I would have to figure out how get difference between the start date and end date given by user
-for n in range(offset, 40):
+#######Create a for loop to iterate over sheet values#######
+
+testy = []                      #testy = close prices on chart
+testx = []                      #testx = date on chart
+offset = 6                      #offset is used to get the for loop to see the column I want it to start at as the starting point for looping
+                                #I need it to start at column 6 so 6-6 will make it the starting point
+
+
+for n in range(offset, day_range):
     testy += [data.iloc[n,5]]
     testx += [data.iloc[n,1]]
-    print(testx[n-offset])
-    print(testy[n-offset])
+    y = testy[n-offset]
+    x = testx[n-offset]
+    print(x)
+#convert testy values into an array with float values and store in variable testy1
+n_arr = np.array(testy, dtype=float)
+testy1 = n_arr
+#print(testy1)
 
-#plots the chart with the axis. I will add labels and a map key later on
-plt.plot(testx, testy)
+#plotting the data section
+
+plt.title('Historical Stock Data')
+#adding grid to plot
+plt.grid(True)
+#plots the values readd above
+plt.plot(testx, n_arr)
+#rotates the ticker symbols 90 degrees - formatting
+plt.xticks(rotation = 90)
+#plot and show graph
 plt.show()
+
+#My code is not displaying some dates that I ask of it at the moment but it is a minor fix. More additions to this code will come soon
 
