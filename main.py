@@ -24,6 +24,7 @@ client = gspread.authorize(credentials)
 sheet = client.open("GoogleFinanceScrape").sheet1   #Uses the google sheets that was shared
 data = sheet.get_all_records()  #access all data in sheets
 
+
 #Get input for start date
 start_date = input("Enter the start date in MM/DD/YYYY format: ")
 
@@ -80,8 +81,8 @@ high_price = []                                             #Variable initialize
 low_price = []                                              #Variable initialized to store all low prices for each day in a list
 
 
-offset = 6                                                  #offset is used to get the for loop to see the column I want it to start at as the starting point for looping
-                                                            #I need it to start at column 6 so 6-6 will make it the starting point
+offset = 6                                                  #offset is used to get the for loop to see the row I want it to start at as the starting point for looping
+                                                            #I need it to start at row 6 so 6-6 will make it the starting point
 
 #for loop that loops through each column in data frame.
 for n in range(offset,day_range):
